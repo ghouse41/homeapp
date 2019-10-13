@@ -1,0 +1,38 @@
+version: '3.6'
+
+services: 
+  homeapp:
+    container_name: homeapp_container
+    build:
+      context: ./services/homeapp
+      dockerfile: Dockerfile-django
+    volumes:
+      - './services/homeapp:/usr/src/app'
+    ports:
+      - '8000:8000'
+    networks:
+      - homeapp_network
+    depends_on:
+      - homeapp-db
+  
+  homeapp-db:
+    container_name: homeapp_db_container
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeme
+      PGDATA: /data/postgres
+    volumes:
+       - homeapp-db-volume:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - homeapp_network
+    restart: unless-stopped
+
+networks:
+  homeapp_network:
+    driver: bridge
+
+volumes:
+    homeapp-db-volume:
