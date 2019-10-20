@@ -6,8 +6,10 @@ import sys
 # basedir = os.path.dirname(os.path.abspath(__file__))
 # sys.path.extend(basedir)
 
+HOMEAPP_SETTINGS_MODULE = 'homeapp.settings'
+
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homeapp.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', HOMEAPP_SETTINGS_MODULE)
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

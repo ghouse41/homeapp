@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.5'
 
 services: 
   homeapp:
@@ -10,29 +10,15 @@ services:
       - './services/homeapp:/usr/src/app'
     ports:
       - '8000:8000'
-    networks:
-      - homeapp_network
     depends_on:
-      - homeapp-db
+      - homeapp_db
   
-  homeapp-db:
-    container_name: homeapp_db_container
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: changeme
-      PGDATA: /data/postgres
-    volumes:
-       - homeapp-db-volume:/data/postgres
+  homeapp_db: # new
+    build:
+      context: ./services/db
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
-    networks:
-      - homeapp_network
-    restart: unless-stopped
-
-networks:
-  homeapp_network:
-    driver: bridge
-
-volumes:
-    homeapp-db-volume:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
